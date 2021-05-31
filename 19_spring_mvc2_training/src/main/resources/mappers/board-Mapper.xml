@@ -5,6 +5,22 @@
 <!-- namespace 는 중복되지 않고 고유해야'만' 한다. -->
 <mapper namespace="com.spring.mapper.BoardMapper">
 
+	<select id="getAllBoard" resultType="com.spring.board.dto.BoardDTO">
+		SELECT
+				*
+		FROM
+				BOARD
+	</select>
+	
+	<select id="getOneBoard" parameterType="int" resultType="com.spring.board.dto.BoardDTO">
+		SELECT
+				*
+		FROM
+				BOARD
+		WHERE
+				NUM = #{num}
+	</select>
+	
 	<insert id="insertBoard" parameterType="com.spring.board.dto.BoardDTO">
 		INSERT INTO BOARD (
 			WRITER,
@@ -23,6 +39,30 @@
 			#{readCount},
 			#{content})
 	
-	</insert>	
+	</insert>
+	
+	<select id="validateUserCheck" parameterType="com.spring.board.dto.BoardDTO" resultType="com.spring.board.dto.BoardDTO">
+		SELECT
+				*
+		FROM
+				BOARD
+		WHERE
+				NUM=#{num} AND PASSWORD=#{password}
+	</select>
+	
+	<update id="updateBoard" parameterType="com.spring.board.dto.BoardDTO">
+		UPDATE BOARD SET
+			SUBJECT=#{subject},
+			CONTENT=#{content}
+		WHERE
+			NUM=#{num}
+	</update>
+	
+	<update id="increaseReadCount" parameterType="int">
+		UPDATE BOARD SET
+			READ_COUNT = READ_COUNT + 1
+		WHERE
+			NUM=#{num}
+	</update>
 	
 </mapper>		

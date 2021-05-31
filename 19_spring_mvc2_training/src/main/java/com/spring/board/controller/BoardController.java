@@ -1,9 +1,13 @@
 package com.spring.board.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.spring.board.dto.BoardDTO;
 import com.spring.board.service.BoardService;
@@ -25,7 +29,50 @@ public class BoardController {
 	public String boardWrite(BoardDTO bdto) throws Exception {
 	
 		boardService.insertBoard(bdto);
-		
 		return "board/main";
 	}
+	
+	@RequestMapping(value="/boardList")
+	public String boardList(Model model) throws Exception {
+		
+		List<BoardDTO> boardList = boardService.getBoardList();
+		
+		// 메소드의 매개변수에 Model 인터페이스를 선언하고
+		// model.addAttribute(키,벨류) 형태로 데이터를 view로 전송한다.
+		
+		model.addAttribute("boardList", boardList);
+		
+		return "board/bList";
+	}
+	
+	@RequestMapping(value="/boardInfo")
+	public String boardInfo(@RequestParam("num") int num, Model model) throws Exception {
+		
+		BoardDTO bdto = boardService.getOneBoard(num);
+		model.addAttribute("bdto", bdto);
+
+		return "board/bInfo";
+	}
+	
+	@RequestMapping(value="/boardUpdate", method=RequestMethod.GET)
+	public String boardUpdate(@RequestParam("num") int num, Model model) throws Exception{
+		
+		BoardDTO bdto = boardService.getOneBoard(num);
+		
+		model.addAttribute("bdto", bdto);
+		
+		return "board/bUpdate";
+	}
+	
+	@RequestMapping(value="/boardUpdate", method=RequestMethod.POST)
+	public String boardUpdate(BoardDTO bdto, Model model) throws Exception{
+		
+		boolean isSucceed = boardService.updateBoard(bdto);
+		
+		if (isSucceed) model.addAttribute("success", true);		
+		else 		   model.addAttribute("success", false);		
+
+		return "board/bUpdatePro";
+	}
+	
 }
