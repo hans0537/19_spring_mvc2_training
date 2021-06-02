@@ -9,12 +9,12 @@ import com.spring.board.dao.BoardDAO;
 import com.spring.board.dto.BoardDTO;
 
 @Service // 서비스(비즈니스 로직)는 Service를 명시해야 한다.
-		 // 현재 클래스를 Service bean 으로 등록시킨다.
+// 현재 클래스를 Service bean 으로 등록시킨다.
 public class BoardServiceImpl implements BoardService {
 
 	@Autowired
 	private BoardDAO boardDAO;
-	
+
 	@Override
 	public void insertBoard(BoardDTO bdto) throws Exception {
 		boardDAO.insert(bdto);
@@ -33,16 +33,29 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public boolean updateBoard(BoardDTO bdto) throws Exception {
-		
+
 		boolean isSucceed = false;
-		
+
 		if (boardDAO.validateUserCheck(bdto) != null) {
 			boardDAO.update(bdto);
 			isSucceed = true;
 		}
-		
+
 		return isSucceed;
 	}
-	
-	
+
+	@Override
+	public boolean deleteBoard(BoardDTO bdto) throws Exception {
+		
+		boolean isSucceed = false;
+
+		if (boardDAO.validateUserCheck(bdto) != null) {
+			boardDAO.delete(bdto.getNum());
+			isSucceed = true;
+		}
+
+		return isSucceed;
+	}
+
+
 }

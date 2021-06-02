@@ -65,4 +65,11 @@
 			NUM=#{num}
 	</update>
 	
+	<delete id="deleteBoard" parameterType="int">
+		DELETE FROM
+				BOARD
+		WHERE
+				NUM=#{num}
+	</delete>
+	
 </mapper>		
